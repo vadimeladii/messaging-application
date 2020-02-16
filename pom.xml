@@ -12,5 +12,6 @@
 
     <modules>
         <module>pechkin-service</module>
+        <module>big-brother-service</module>
     </modules>
 </project>
