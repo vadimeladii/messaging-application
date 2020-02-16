@@ -13,5 +13,6 @@
     <modules>
         <module>pechkin-service</module>
         <module>big-brother-service</module>
+        <module>agent-smith-service</module>
     </modules>
 </project>
