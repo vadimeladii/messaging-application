@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import md.springboot.dto.Message;
 import md.springboot.service.MessageService;
 import md.springboot.service.PechkinService;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +21,10 @@ public class PechkinServiceImpl implements PechkinService {
     public void sendMessages(int numberOfRequest, String text) {
         IntStream.range(0, numberOfRequest).forEach((i -> {
                     Optional.of(text)
-                            .map(m -> new Message(extractInfo(text)))
+                            .map(m -> {
+                                String info = extractInfo(text);
+                                return new Message(encryption(info));
+                            })
                             .ifPresent(messageService::send);
                 })
         );
@@ -36,5 +40,12 @@ public class PechkinServiceImpl implements PechkinService {
         int max = Math.max(a, b);
 
         return text.substring(min, max);
+    }
+
+    private String encryption(String info) {
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword("myEncryptionPassword");
+
+        return textEncryptor.encrypt(info);
     }
 }
